@@ -207,6 +207,48 @@ The value specified in the @Target meta-annotation restricts where to apply the 
 
 # @GetMapping("/users/{id}")  
 
+@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+The new approach makes it possible to shorten this simply to:
+
+@GetMapping("/get/{id}")
+
+# @GetMapping
+
+```
+@GetMapping("/get")
+public @ResponseBody ResponseEntity<String> get() {
+    return new ResponseEntity<String>("GET Response", HttpStatus.OK);
+}
+@GetMapping("/get/{id}")
+public @ResponseBody ResponseEntity<String>
+  getById(@PathVariable String id) {
+    return new ResponseEntity<String>("GET Response : " 
+      + id, HttpStatus.OK);
+}
+
+```
+# @PostMapping
+```
+@PostMapping("/post")
+public @ResponseBody ResponseEntity<String> post() {
+    return new ResponseEntity<String>("POST Response", HttpStatus.OK);
+}
+
+```
+# @PutMapping
+```
+@PutMapping("/put")
+public @ResponseBody ResponseEntity<String> put() {
+    return new ResponseEntity<String>("PUT Response", HttpStatus.OK);
+}
+```
+# @DeleteMapping
+```
+@DeleteMapping("/delete")
+public @ResponseBody ResponseEntity<String> delete() {
+    return new ResponseEntity<String>("DELETE Response", HttpStatus.OK);
+}
+```
 # @PathVariable 
 
 # @Component  
