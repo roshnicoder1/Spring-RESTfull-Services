@@ -250,5 +250,102 @@ public @ResponseBody ResponseEntity<String> delete() {
 }
 ```
 # @PathVariable 
+```
+the @PathVariable annotation can be used to handle template variables in the request URI mapping, and set them as method parameters.
+
+@PathVariable annotation would be an endpoint that identifies an entity with a primary key:
+
+@GetMapping("/api/employees/{id}")
+@ResponseBody
+public String getEmployeesById(@PathVariable String id) {
+    return "ID: " + id;
+}
+In this example, we use the @PathVariable annotation to extract the templated part of the URI, represented by the variable {id}.
+
+In the previous example, we skipped defining the name of the template path variable since the names for the method parameter and the path variable were the same.
+
+However, if the path variable name is different, we can specify it in the argument of the @PathVariable annotation:
+
+@GetMapping("/api/employeeswithvariable/{id}")
+@ResponseBody
+public String getEmployeesByIdWithVariableName(@PathVariable("id") String employeeId) {
+    return "ID: " + employeeId;
+}
+http://localhost:8080/api/employeeswithvariable/1 
+---- 
+ID: 1
+We can also define the path variable name as @PathVariable(value=”id”) instead of PathVariable(“id”) for clarity.
+
+ we can have more than one path variable in our request URI for a controller method, which also has multiple method parameters:
+
+@GetMapping("/api/employees/{id}/{name}")
+@ResponseBody
+public String getEmployeesByIdAndName(@PathVariable String id, @PathVariable String name) {
+    return "ID: " + id + ", name: " + name;
+}
+http://localhost:8080/api/employees/1/bar 
+---- 
+ID: 1, name: bar
+
+We can also handle more than one @PathVariable parameter using a method parameter of type java.util.Map<String, String>:
+
+@GetMapping("/api/employeeswithmapvariable/{id}/{name}")
+@ResponseBody
+public String getEmployeesByIdAndNameWithMapVariable(@PathVariable Map<String, String> pathVarsMap) {
+    String id = pathVarsMap.get("id");
+    String name = pathVarsMap.get("name");
+    if (id != null && name != null) {
+        return "ID: " + id + ", name: " + name;
+    } else {
+        return "Missing Parameters";
+    }
+}
+
+https://www.baeldung.com/spring-pathvariable
+
+```
+
 
 # @Component  
+
+
+https://www.tutorialspoint.com/difference-between-bean-and-component-annotation-in-spring
+
+In most typical applications, we have distinct layers like data access, presentation, service, business, etc.
+
+Additionally, in each layer we have various beans. To detect these beans automatically, Spring uses classpath scanning annotations.
+
+Then it registers each bean in the ApplicationContext.
+
+@Component is a generic stereotype for any Spring-managed component.
+@Service annotates classes at the service layer.
+@Repository annotates classes at the persistence layer, which will act as a database repository.
+
+3.1. @Component
+We can use @Component across the application to mark the beans as Spring's managed components. Spring will only pick up and register beans with @Component, and doesn't look for @Service and @Repository in general.
+
+They are registered in ApplicationContext because they are annotated with @Component:
+
+
+freestar
+@Component
+public @interface Service {
+}
+@Component
+public @interface Repository {
+}
+@Service and @Repository are special cases of @Component. They are technically the same, but we use them for the different purposes.
+
+3.2. @Repository
+@Repository’s job is to catch persistence-specific exceptions and re-throw them as one of Spring’s unified unchecked exceptions.
+
+For this, Spring provides PersistenceExceptionTranslationPostProcessor, which we are required to add in our application context (already included if we're using Spring Boot):
+
+<bean class=
+  "org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+This bean post processor adds an advisor to any bean that’s annotated with @Repository.
+
+3.3. @Service
+We mark beans with @Service to indicate that they're holding the business logic. Besides being used in the service layer, there isn't any other special use for this annotation.
+
+
