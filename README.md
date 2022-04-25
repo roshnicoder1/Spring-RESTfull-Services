@@ -321,7 +321,7 @@ Then it registers each bean in the ApplicationContext.
 @Service annotates classes at the service layer.
 @Repository annotates classes at the persistence layer, which will act as a database repository.
 
-3.1. @Component
+# @Component
 We can use @Component across the application to mark the beans as Spring's managed components. Spring will only pick up and register beans with @Component, and doesn't look for @Service and @Repository in general.
 
 They are registered in ApplicationContext because they are annotated with @Component:
@@ -336,7 +336,7 @@ public @interface Repository {
 }
 @Service and @Repository are special cases of @Component. They are technically the same, but we use them for the different purposes.
 
-3.2. @Repository
+# @Repository
 @Repository’s job is to catch persistence-specific exceptions and re-throw them as one of Spring’s unified unchecked exceptions.
 
 For this, Spring provides PersistenceExceptionTranslationPostProcessor, which we are required to add in our application context (already included if we're using Spring Boot):
@@ -345,7 +345,9 @@ For this, Spring provides PersistenceExceptionTranslationPostProcessor, which we
   "org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 This bean post processor adds an advisor to any bean that’s annotated with @Repository.
 
-3.3. @Service
+# @Service
 We mark beans with @Service to indicate that they're holding the business logic. Besides being used in the service layer, there isn't any other special use for this annotation.
+
+https://www.youtube.com/watch?v=zJBfC96EYd8
 
 
