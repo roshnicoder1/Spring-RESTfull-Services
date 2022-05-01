@@ -10,7 +10,8 @@
 * @Component  
 * @RequestBody
 * @PostMapping("/user")
-
+* @ResponseStatus 
+* @ControllerAdvice
 
 # @SpringBootApplication annotation. 
 
@@ -356,5 +357,66 @@ https://www.youtube.com/watch?v=zJBfC96EYd8
 The @RequestBody annotation maps body of the web request to the method parameter. The body of the request is passed through an HttpMessageConverter. It resolves the method argument depending on the content type of the request. Optionally, automatic validation can be applied by annotating the argument with @Valid.
 
 # @PostMapping
-The @PathMapping annotation is the specialized version of the @RequestMapping annotation which acts as a shortcut for @RequestMapping(method=RequestMethod=POST). @PostMapping method handles the Http POST requests matched with the specified URI.
+The @PostMapping annotation is the specialized version of the @RequestMapping annotation which acts as a shortcut for @RequestMapping(method=RequestMethod=POST). @PostMapping method handles the Http POST requests matched with the specified URI.
 
+# @ResponseStatus annotation available on custom exceptions and to map these exceptions to HTTP status codes.
+
+Such a custom exception may look like:
+
+```
+package com.ibm.rest.webservices.restfulwebservices.user;
+
+
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;  
+
+@ResponseStatus(HttpStatus.NOT_FOUND)  
+public class UserNotFoundException extends RuntimeException   
+{  
+public UserNotFoundException(String message)   
+{  
+super(message);  
+}  
+
+}
+
+
+```
+
+# @ControllerAdvice is an annotation provided by Spring allowing you to write global code that can be applied to a wide range of controllers — varying from all controllers to a chosen package or even a specific annotation. 
+Spring 3.2 brings support for a global @ExceptionHandler with the @ControllerAdvice annotation.
+
+This enables a mechanism that breaks away from the older MVC model and makes use of ResponseEntity along with the type safety and flexibility of @ExceptionHandler:
+
+```
+@ControllerAdvice
+public class RestResponseEntityExceptionHandler 
+  extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(value 
+      = { IllegalArgumentException.class, IllegalStateException.class })
+    protected ResponseEntity<Object> handleConflict(
+      RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "This should be application specific";
+        return handleExceptionInternal(ex, bodyOfResponse, 
+          new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+}
+
+```
+The@ControllerAdvice annotation allows us to consolidate our multiple, scattered @ExceptionHandlers from before into a single, global error handling component.
+
+The actual mechanism is extremely simple but also very flexible:
+
+It gives us full control over the body of the response as well as the status code.
+It provides mapping of several exceptions to the same method, to be handled together.
+It makes good use of the newer RESTful ResposeEntity response.
+One thing to keep in mind here is to match the exceptions declared with @ExceptionHandler to the exception used as the argument of the method.
+
+If these don't match, the compiler will not complain — no reason it should — and Spring will not complain either.
+
+However, when the exception is actually thrown at runtime, the exception resolving mechanism will fail with:
+
+
+java.lang.IllegalStateException: No suitable resolver for argument [0] [type=...]
+HandlerMethod details: ...
