@@ -16,6 +16,7 @@
 * @Valid 
 * @Size(min=5) 
 * @Past
+* @EnableSwagger2
 	
 
 # @SpringBootApplication annotation. 
@@ -456,3 +457,5 @@ private String name;
 # @Past   date of birth should be in past not in present.
 @Past  
 private Date dob;  
+
+# @EnableSwagger2
