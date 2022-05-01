@@ -12,6 +12,8 @@
 * @PostMapping("/user")
 * @ResponseStatus 
 * @ControllerAdvice
+* @DeleteMapping("/users/{id}")  
+	
 
 # @SpringBootApplication annotation. 
 
@@ -420,3 +422,12 @@ However, when the exception is actually thrown at runtime, the exception resolvi
 
 java.lang.IllegalStateException: No suitable resolver for argument [0] [type=...]
 HandlerMethod details: ...
+
+# @DeleteMapping("/users/{id}")  
+	public void deleteUser(@PathVariable int id)  
+	{  
+	User user= service.deleteById(id);  
+	if(user==null)  
+	//runtime exception  
+	throw new UserNotFoundException("id: "+ id);  
+	}  
