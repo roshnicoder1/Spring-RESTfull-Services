@@ -8,6 +8,8 @@
 * @GetMapping("/users/{id}")  
 * @PathVariable 
 * @Component  
+* @RequestBody
+* @PostMapping("/user")
 
 
 # @SpringBootApplication annotation. 
@@ -350,4 +352,9 @@ We mark beans with @Service to indicate that they're holding the business logic.
 
 https://www.youtube.com/watch?v=zJBfC96EYd8
 
+# @RequestBody
+The @RequestBody annotation maps body of the web request to the method parameter. The body of the request is passed through an HttpMessageConverter. It resolves the method argument depending on the content type of the request. Optionally, automatic validation can be applied by annotating the argument with @Valid.
+
+# @PostMapping
+The @PathMapping annotation is the specialized version of the @RequestMapping annotation which acts as a shortcut for @RequestMapping(method=RequestMethod=POST). @PostMapping method handles the Http POST requests matched with the specified URI.
 
