@@ -13,6 +13,9 @@
 * @ResponseStatus 
 * @ControllerAdvice
 * @DeleteMapping("/users/{id}")  
+* @Valid 
+* @Size(min=5) 
+* @Past
 	
 
 # @SpringBootApplication annotation. 
@@ -431,3 +434,25 @@ HandlerMethod details: ...
 	//runtime exception  
 	throw new UserNotFoundException("id: "+ id);  
 	}  
+# @Valid
+Add @Valid annotation. It is a Javax validation API. Its default classpath is spring-boot-starter-web.
+To validate a request we use @valid
+
+```
+//method that posts a new user detail and returns the status of the user resource  
+@PostMapping("/users")  
+public ResponseEntity<Object> createUser(@Valid @RequestBody User user)     
+{  
+User sevedUser=service.save(user);    
+URI location=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(sevedUser.getId()).toUri();  
+return ResponseEntity.created(location).build();  
+}  
+```
+
+# @Size(min=5) annotation name should have at least five characters
+@Size(min=5)  
+private String name;  
+
+# @Past   date of birth should be in past not in present.
+@Past  
+private Date dob;  
