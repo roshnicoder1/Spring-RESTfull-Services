@@ -38,6 +38,20 @@ public class SimpleBookController {
     public @ResponseBody Book getBook(@PathVariable int id) {
         return findBookById(id);
     }
+    
+    
+  # http://localhost:8080/swagger-ui.html
+  
+  It shows the documentation of the services that we have created.
+  
+  # http://localhost:8080/v3/api-docs
+  
+  It shows the complete documentation in JSON format, as shown in the following image. It is not much easy to read and understand. Swagger has provided it to be used in other systems like API management tools that offer functionality like API gateways, API caching, API documentation, etc.
+  
+  
+  
+    
+    
 
     private Book findBookById(int id) {
         // ...
